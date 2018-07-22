@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">FakeNewsApp</string>
+
+    <string name="connect_timeout">15000</string>
+    <string name="read_timeout">10000</string>
+    <string name="internet_connection_error">There is no internet connection.</string>
+    <string name="no_fake_news">There is no fake news to show</string>
+
+</resources>
