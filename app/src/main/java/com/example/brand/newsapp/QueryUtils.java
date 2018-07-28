@@ -20,8 +20,10 @@ import java.util.List;
 
 public final class QueryUtils {
     private static final String LOG_TAG = QueryUtils.class.getSimpleName();
+
     private QueryUtils() {
     }
+
     public static List<FakeNews> fetchFakeNewsData(String requestUrl) {
         URL url = createUrl(requestUrl);
 
@@ -113,23 +115,25 @@ public final class QueryUtils {
                 JSONObject currentNewsfeed = NewsfeedArray.getJSONObject(i);
                 String section = currentNewsfeed.getString("sectionName");
                 String title = currentNewsfeed.getString("webTitle");
-                JSONArray tags = currentNewsfeed.getJSONArray("tags");
-
                 String authorName = null;
                 String authorSurname = null;
-                for (int j = 0; j < tags.length(); j++) {
-                    JSONObject currentAuthor = tags.getJSONObject(j);
-                    if (currentAuthor.has("firstName")) {
-                        authorName = currentAuthor.getString("firstName");
-                    }
-                    if (currentAuthor.has("lastName")) {
-                        authorSurname = currentAuthor.getString("lastName");
+                if (currentNewsfeed.has("tags")) {
+                    JSONArray tags = currentNewsfeed.getJSONArray("tags");
+                    for (int j = 0; j < tags.length(); j++) {
+                        JSONObject currentAuthor = tags.getJSONObject(j);
+                        if (currentAuthor.has("firstName")) {
+                            authorName = currentAuthor.getString("firstName");
+                        }
+                        if (currentAuthor.has("lastName")) {
+                            authorSurname = currentAuthor.getString("lastName");
+                        }
                     }
                 }
 
                 String time = currentNewsfeed.getString("webPublicationDate");
                 String url = currentNewsfeed.getString("webUrl");
-                FakeNews Newsfeed = new FakeNews(section, title, authorName + " "+ authorSurname, time, url);
+                String author = (TextUtils.isEmpty(authorName) || TextUtils.isEmpty(authorSurname))? "" : authorName + " " + authorSurname;
+                FakeNews Newsfeed = new FakeNews(section, title, author, time, url);
                 FakeNewsObject.add(Newsfeed);
             }
 
