@@ -83,31 +83,28 @@ public class FakeNewsActivity extends AppCompatActivity
 
 
     @Override
-    // onCreateLoader instantiates and returns a new Loader for the given ID
     public Loader<List<FakeNews>> onCreateLoader(int i, Bundle bundle) {
 
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-        // getString retrieves a String value from the preferences; the second parameter is the default value for this preference
         String topic = sharedPrefs.getString(
                 getString(R.string.settings_section_category_key),
                 getString(R.string.settings_section_category_default));
 
 
-        // parse breaks apart the URI string that's passed into its parameter
         Uri baseUri = Uri.parse(GAURDIAN_API_URL);
-        // buildUpon prepares the baseUri that we just parsed so we can add query parameters to it
         Uri.Builder uriBuilder = baseUri.buildUpon();
 
-        //uriBuilder.appendQueryParameter("order-by", orderBy);
         uriBuilder.appendQueryParameter("show-fields", "all");
         uriBuilder.appendQueryParameter("q", topic);
+        uriBuilder.appendQueryParameter("show-tags", "contributor");
+
+
 
         String urlAddress = uriBuilder.toString();
 
         Log.v("MainActivity", "addressUrl: " + urlAddress);
 
-        // Create a new loader for the given URL
         return new FakeNewsLoader(this, urlAddress);
     }
     @Override
